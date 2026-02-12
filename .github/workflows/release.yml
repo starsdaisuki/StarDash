@@ -12,6 +12,9 @@ on:
   # 也可以在 GitHub 网页上手动触发
   workflow_dispatch:
 
+permissions:          # ← 加这两行
+  contents: write     # ← 加这两行
+
 jobs:
   build:
     strategy:
