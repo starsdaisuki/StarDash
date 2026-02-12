@@ -1,24 +1,70 @@
-# Tauri + Vue + TypeScript
+# ⚡ StarDash
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A cross-platform system monitoring dashboard built with Tauri + Vue + Rust.
 
-## Recommended IDE Setup
+![StarDash Screenshot](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-blue)
+![GitHub Release](https://img.shields.io/github/v/release/starsdaisuki/StarDash)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Features
 
+- **CPU Monitoring** — Real-time usage, per-core breakdown, 90-second history chart
+- **Memory Tracking** — Usage stats with live trend visualization
+- **Disk Info** — Capacity, usage, and filesystem details for all partitions
+- **Network Monitor** — Upload/download speed, local IPs, public IP with VPN detection
+- **Process Manager** — Top 10 processes by CPU usage
+- **Battery Status** — Charge level, health, cycle count (laptops)
+- **Glassmorphism UI** — Dark gradient background with frosted glass cards
 
-TAURI-TEST/
-├── src/                ← 前端代码（Vue），你主要改这里
-│   ├── App.vue         ← 主组件，现在显示的那个欢迎页面
-│   ├── main.ts         ← 前端入口
-│   └── ...
-├── src-tauri/          ← Rust 后端，Tauri 的核心
-│   ├── src/
-│   │   └── lib.rs      ← 你写 Rust 命令的地方（读CPU等）
-│   ├── Cargo.toml      ← Rust 的依赖配置（类似 package.json）
-│   └── tauri.conf.json ← Tauri 配置（窗口大小、标题等）
-├── index.html          ← 入口 HTML
-├── package.json        ← 前端依赖配置
-├── pnpm-lock.yaml      ← pnpm 的锁文件，不用管
-├── vite.config.ts      ← Vite 配置
-└── tsconfig.json       ← TypeScript 配置
+## Screenshots
+
+> TODO: Add screenshots here
+
+## Download
+
+Go to [Releases](https://github.com/starsdaisuki/StarDash/releases) and download the installer for your platform:
+
+| Platform | File |
+|----------|------|
+| Windows | `StarDash_x64-setup.exe` or `.msi` |
+| macOS (Apple Silicon) | `StarDash_aarch64.dmg` |
+| macOS (Intel) | `StarDash_x64.dmg` |
+| Linux (Debian/Ubuntu) | `StarDash_amd64.deb` |
+| Linux (Fedora) | `StarDash_x86_64.rpm` |
+| Linux (Universal) | `StarDash_amd64.AppImage` |
+
+## Tech Stack
+
+- **Frontend**: Vue 3 + TypeScript
+- **Backend**: Rust
+- **Framework**: Tauri 2
+- **Build Tool**: Vite
+- **CI/CD**: GitHub Actions (auto-build for Windows, macOS, Linux)
+
+## Development
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18+)
+- [pnpm](https://pnpm.io/)
+- [Rust](https://rustup.rs/)
+- [Tauri Prerequisites](https://tauri.app/start/prerequisites/)
+
+### Setup
+
+```bash
+git clone https://github.com/starsdaisuki/StarDash.git
+cd StarDash
+pnpm install
+pnpm tauri dev
+```
+
+### Build
+
+```bash
+pnpm tauri build
+```
+
+## License
+
+MIT
