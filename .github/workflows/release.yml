@@ -1,0 +1,88 @@
+# 通用 Tauri 多平台构建配置
+# 把这个文件放在项目的 .github/workflows/release.yml
+
+name: Build & Release
+
+# 什么时候触发构建
+on:
+  # 打 tag 的时候自动构建（推荐的发布方式）
+  push:
+    tags:
+      - 'v*'  # 比如 git tag v0.1.0 然后 push
+  # 也可以在 GitHub 网页上手动触发
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false  # 一个平台失败了不影响其他平台继续构建
+      matrix:
+        include:
+          - platform: macos-latest    # macOS (Apple Silicon)
+            args: --target aarch64-apple-darwin
+            rust_target: aarch64-apple-darwin
+          - platform: macos-latest    # macOS (Intel)
+            args: --target x86_64-apple-darwin
+            rust_target: x86_64-apple-darwin
+          - platform: windows-latest  # Windows
+            args: ''
+            rust_target: ''
+          - platform: ubuntu-22.04   # Linux
+            args: ''
+            rust_target: ''
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      # 1. 拉取代码
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. 安装 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 3. 安装 pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # 4. 安装 Rust
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust_target }}
+
+      # 5. Rust 缓存（加速后续构建）
+      - name: Rust Cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      # 6. Linux 专用：安装系统依赖
+      - name: Install Linux dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      # 7. 安装前端依赖
+      - name: Install frontend dependencies
+        run: pnpm install
+
+      # 8. 构建 Tauri 应用
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # 如果是 tag 触发，自动创建 GitHub Release
+          tagName: ${{ github.ref_name }}
+          releaseName: 'StarDash ${{ github.ref_name }}'
+          releaseBody: '系统仪表盘新版本发布，请下载对应平台的安装包。'
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}
